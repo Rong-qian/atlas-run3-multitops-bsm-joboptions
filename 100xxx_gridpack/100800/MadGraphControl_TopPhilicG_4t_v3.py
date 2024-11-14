@@ -168,28 +168,13 @@ output -f""".format(process_string=process_string[process_id])
 
 process_dir = new_process(process, keepJpegs=development_mode)
 
-#---------------------------------------------------------------------------------------------------
-# Define run card
-#---------------------------------------------------------------------------------------------------
-modify_run_card(process_dir=process_dir, runArgs=runArgs, settings=extras)
-
-#---------------------------------------------------------------------------------------------------
-# Define parameter card
-#---------------------------------------------------------------------------------------------------
-# apply PMG settings for top quark and SM particles
-from MadGraphControl.MadGraphParamHelpers import set_top_params
-mtop=172.5
-set_top_params(process_dir=process_dir, mTop=mtop, FourFS=False)
-
-if not is_gen_from_gridpack():
-  modify_param_card(process_dir=process_dir, params={k:v for (k,v) in parameters.items()})
-
 # ---------------------------------------------------------------------------
 # MadSpin Card
 # ---------------------------------------------------------------------------
 #if process_id in ['tttt', 'ttjt', 'ttwt', 'ttttsm']:
 #  bwcut = extras['bwcutoff']
-#  madspin_card_loc=process_dir+'/Cards/madspin_card.dat'
+#  #madspin_card_loc=process_dir+'/Cards/madspin_card.dat'
+#  madspin_card_loc='madevent/Cards/madspin_card.dat'
 #  mscard = open(madspin_card_loc,'w')
 #  mscard.write("""#************************************************************
 #*                        MadSpin                           *
@@ -212,6 +197,22 @@ if not is_gen_from_gridpack():
 # launch
 # """%(bwcut, runArgs.randomSeed))
 #  mscard.close()
+
+#---------------------------------------------------------------------------------------------------
+# Define run card
+#---------------------------------------------------------------------------------------------------
+modify_run_card(process_dir=process_dir, runArgs=runArgs, settings=extras)
+
+#---------------------------------------------------------------------------------------------------
+# Define parameter card
+#---------------------------------------------------------------------------------------------------
+# apply PMG settings for top quark and SM particles
+from MadGraphControl.MadGraphParamHelpers import set_top_params
+mtop=172.5
+set_top_params(process_dir=process_dir, mTop=mtop, FourFS=False)
+
+if not is_gen_from_gridpack():
+  modify_param_card(process_dir=process_dir, params={k:v for (k,v) in parameters.items()})
 
 #---------------------------------------------------------------------------------------------------
 # Add reweight card, therefore allowing for scans of theta1 and ct1
