@@ -95,14 +95,14 @@ class CondorHandler(object) :
         fs.write('Universe            = {0}\n'.format(self._condor_options['universe']))
       if 'jobflavour' in self._condor_options.keys():
         fs.write('+JobFlavour         = "{0}"\n'.format(self._condor_options['jobflavour']))
-      if 'project' in self._condor_options.keys():
-        fs.write("+MyProject          = \"{0}\"\n".format(self._condor_options['project']))
-      if 'runtime' in self._condor_options.keys():
-        fs.write("+RequestRuntime     = {0}\n".format(self._condor_options['runtime']))
-      if 'memory' in self._condor_options.keys():
-        fs.write("Request_Memory      = {0}\n".format(self._condor_options['memory']))
-      if 'cpu' in self._condor_options.keys():
-        fs.write("Request_CPUs        = {0}\n".format(self._condor_options['cpu']))
+      #if 'project' in self._condor_options.keys():
+      #  fs.write("+MyProject          = \"{0}\"\n".format(self._condor_options['project']))
+      #if 'runtime' in self._condor_options.keys():
+      #  fs.write("+RequestRuntime     = {0}\n".format(self._condor_options['runtime']))
+      #if 'memory' in self._condor_options.keys():
+      #  fs.write("Request_Memory      = {0}\n".format(self._condor_options['memory']))
+      #if 'cpu' in self._condor_options.keys():
+      #  fs.write("Request_CPUs        = {0}\n".format(self._condor_options['cpu']))
       if 'requirements' in self._condor_options.keys():
         fs.write("Requirements        = {0}\n".format(self._condor_options['requirements']))
       if 'container' in self._condor_options.keys():
@@ -112,7 +112,7 @@ class CondorHandler(object) :
       fs.write('Error               = {0}/stderr_{1}_$(ClusterId).txt\n'.format(self.log_path, self._tag))
       fs.write('log                 = {0}/batch_{1}_$(ClusterId).log\n'.format(self.log_path, self._tag))
       fs.write('+isLongJob=True\n')
-      fs.write('requirements = (OpSysAndVer =?= "CentOS7")\n')
+      #fs.write('requirements = (OpSysAndVer =?= "CentOS7")\n')
       fs.write('\nqueue\n')
       fs.close()
     logging.debug("Made job file " + batchFile)

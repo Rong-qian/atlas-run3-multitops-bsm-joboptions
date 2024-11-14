@@ -51,6 +51,13 @@ if [[ -z ${INPUTGENFILE} ]]; then
     echo "input generator file not provided, running without it.";
 fi
 
+# Madspin path, used if mannually add madspin into gridpack
+ADDMADSPIN=${7}
+if [[ -z ${ADDMADSPIN} ]]; then
+    echo "not add madspin card to the gridpack";
+    ADDMADSPIN=0;
+fi
+
 # launch job
 if [[ $GRIDPACK -eq 0 ]]; then
 TAG=${DSID}_${COMENERGY/.*}GeV_${SEED}_MCJO
@@ -78,6 +85,11 @@ mkdir -p $RESULTDIR
 rm -rf $TMPWORKDIR && mkdir -p $TMPWORKDIR
 fi 
 
+if [[ $GRIDPACK -eq 2 && $ADDMADSPIN!=0 ]];then
+mkdir -p $RESULTDIR
+mkdir -p $TMPWORKDIR
+fi
+
 JOBFOLDER=${DSID:0:3}xxx
 if [[ $GRIDPACK -ne 0 ]];then
 JOBFOLDER=${DSID:0:3}xxx_gridpack
@@ -104,6 +116,22 @@ if [[ -f "${INPUTGENFILE}" ]]; then
 fi
 cd $TMPWORKDIR
 
+if [[ $ADDMADSPIN != 0 ]];then
+TAR=$(find . -type f -name "*.tar.gz")
+tar -xvf $TAR
+cp $ADDMADSPIN  madevent/Cards
+rm $TAR
+
+echo "testflag1"
+ls madevent/Cards/madspin*
+
+tar czf $TAR madevent
+
+echo "testflag1"
+ls *.tar.gz
+
+fi
+
 # Run event generation
 
 if [[ $GRIDPACK -eq 0 ]];then
@@ -126,13 +154,17 @@ ls $INPUTGENFILE
 COMMAND="Gen_tf.py --firstEvent=1 --maxEvents=$NEVENTS --ecmEnergy=$COMENERGY --randomSeed=$SEED \
   --jobConfig=${DSID} --outputEVNTFile=test_DSID_${DSID}.EVNT.root"
 if [[ -f "${INPUTGENFILE}" ]]; then
+if [[ $ADDMADSPIN != 0 ]];then
 COMMAND+=" --inputGeneratorFile=${INPUTGENFILE}"
+else
+COMMAND+=" --inputGeneratorFile=${TAR}"
+fi # end if [[ -f "${INPUTGENFILE}" ]]
 else
    cp $RESULTDIR/mc*tar.gz .
    MCfile=$(ls mc*tar.gz)
    COMMAND+=" --inputGeneratorFile=${MCfile}"
-fi
-fi
+fi #end if [[ -f "${INPUTGENFILE}" ]]
+fi #end if [[ $GRIDPACK -eq 2 ]]
 
 echo $COMMAND
 $COMMAND
@@ -157,8 +189,10 @@ cp $TMPWORKDIR/mc*tar.gz $RESULTDIR/
 
 #find $TMPWORKDIR/PROC_*/SubProcesses -type f -name "*.jpg" -exec cp --parents {} $RESULTDIR/ \;
 
+# In case you find tmp can't be deleted
+chmod -R 777 $TMPWORKDIR
 # uncomment next line if testing
-rm -rf $TMPWORKDIR
+#rm -rf $TMPWORKDIR
 cd -
 
 # Generate the rivet plots

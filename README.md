@@ -33,7 +33,9 @@ Set by the gridpack parameter in run.sh.
 
 2: generating events with gridpack. In this mode, the seed number used in last step should be use as the seed. This is because it look for the output directory in last step. This may be avoided using input LHE file option(under development).
 
-(TODO): The tmp workdir hasn't been removed yet for testing. The whole workflow needed to be tested
+For madspin and gridpack issue, gridpack must be generated without the madspin and put the madspin card into the grid pack before generating events from gridpack. This can be done by:
+Input INPUTGENFILE(path to gridpack) and ADDMADSPIN(path to madspin card)
+
 
 ## Make validation plots
 

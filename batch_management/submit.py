@@ -38,6 +38,21 @@ parser.add_argument(
     type=int,
 )
 
+parser.add_argument(
+    "--location",
+    help="If run in gridpack gen mode and the gridpack is not in the same directory as gridpack generation, the path to new gridpack",
+    nargs="+",
+    default=[],
+    type=str,
+)
+
+parser.add_argument(
+    "--madspin",
+    help="madspin card location",
+    type=str,
+    default=None,
+)
+
 args = parser.parse_args()
 
 
@@ -58,19 +73,29 @@ handler['jobflavour'] = "nextweek"
 if args.gridpack != 2:
     for dsid, com in product(args.dsids, args.ecmEnergy):
         seed = int(random.uniform(100000, 500000))
+        if len(args.seed) == 1:
+            seed = args.seed[0]
         tag = "evgen_{dsid}_{com}TeV_{seed}".format(dsid=dsid, com=int(com)*0.001, seed=seed)
         workdir = os.getcwd()
 
         command = "cd {0} && source {0}/setup.sh && bash {0}/run.sh ".format(workdir)
         command += " {dsid} {nevents} {com} {seed} {gridpack}".format(dsid=dsid, nevents=args.eventsPerJob, com=com, seed=seed,gridpack=args.gridpack)
-
-        handler.send_job(command, tag)
+        print(command)
+        #handler.send_job(command, tag)
 else:
     for i in range(len((args.dsids))):
-        tag = "evgen_{dsid}_{com}TeV_{seed}_gridpack_gen".format(dsid=args.dsids[i], com=int(args.ecmEnergy[0])*0.001, seed=args.seed[i])
+        dsid = args.dsids[i]
+        if len(args.seed) == 1:
+            seed = args.seed[0]
+        else:
+            seed = args.seed[i]
+        tag = "evgen_{dsid}_{com}TeV_{seed}_gridpack_gen".format(dsid=args.dsids[i], com=int(args.ecmEnergy[0])*0.001, seed=seed)
         workdir = os.getcwd()
-
         command = "cd {0} && source {0}/setup.sh && bash {0}/run.sh ".format(workdir)
         command += " {dsid} {nevents} {com} {seed} {gridpack}".format(dsid=args.dsids[i], nevents=args.eventsPerJob, com=int(args.ecmEnergy[0]), seed=args.seed[i],gridpack=args.gridpack)
-
+        if len(args.location)>0 :
+            command += " {location} ".format(location=args.location[i])
+        if args.madspin != None:
+            command += " {madspin} ".format(madspin=args.madspin)
+        print(command)
         handler.send_job(command, tag)

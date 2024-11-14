@@ -187,31 +187,31 @@ if not is_gen_from_gridpack():
 # ---------------------------------------------------------------------------
 # MadSpin Card
 # ---------------------------------------------------------------------------
-if process_id in ['tttt', 'ttjt', 'ttwt', 'ttttsm']:
-  bwcut = extras['bwcutoff']
-  madspin_card_loc=process_dir+'/Cards/madspin_card.dat'
-  mscard = open(madspin_card_loc,'w')
-  mscard.write("""#************************************************************
-  #*                        MadSpin                           *
-  #*                                                          *
-  #*    P. Artoisenet, R. Frederix, R. Rietkerk, O. Mattelaer *
-  #*                                                          *
-  #*    Part of the MadGraph5_aMC@NLO Framework:              *
-  #*    The MadGraph5_aMC@NLO Development Team - Find us at   *
-  #*    https://server06.fynu.ucl.ac.be/projects/madgraph     *
-  #*                                                          *
-  #************************************************************
-  set max_weight_ps_point 450  # number of PS to estimate the maximum for each event
-  set BW_cut %i
-  set seed %i
-  define wdec = e+ mu+ ta+ e- mu- ta- ve vm vt ve~ vm~ vt~ g u c d s b u~ c~ d~ s~ b~
-  decay t > w+ b, w+ > wdec wdec
-  decay t~ > w- b~, w- > wdec wdec
-  decay w+ > wdec wdec
-  decay w- > wdec wdec 
-  launch
-  """%(bwcut, runArgs.randomSeed))
-  mscard.close()
+#if process_id in ['tttt', 'ttjt', 'ttwt', 'ttttsm']:
+#  bwcut = extras['bwcutoff']
+#  madspin_card_loc=process_dir+'/Cards/madspin_card.dat'
+#  mscard = open(madspin_card_loc,'w')
+#  mscard.write("""#************************************************************
+#*                        MadSpin                           *
+#*                                                          *
+#*    P. Artoisenet, R. Frederix, R. Rietkerk, O. Mattelaer *
+#*                                                          *
+#*    Part of the MadGraph5_aMC@NLO Framework:              *
+#*    The MadGraph5_aMC@NLO Development Team - Find us at   *
+#*    https://server06.fynu.ucl.ac.be/projects/madgraph     *
+#*                                                          *
+#************************************************************
+# set max_weight_ps_point 450  # number of PS to estimate the maximum for each event
+# set BW_cut %i
+# set seed %i
+# define wdec = e+ mu+ ta+ e- mu- ta- ve vm vt ve~ vm~ vt~ g u c d s b u~ c~ d~ s~ b~
+# decay t > w+ b, w+ > wdec wdec
+# decay t~ > w- b~, w- > wdec wdec
+# decay w+ > wdec wdec
+# decay w- > wdec wdec 
+# launch
+# """%(bwcut, runArgs.randomSeed))
+#  mscard.close()
 
 #---------------------------------------------------------------------------------------------------
 # Add reweight card, therefore allowing for scans of theta1 and ct1
